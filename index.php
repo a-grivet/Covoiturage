@@ -1,6 +1,6 @@
 <?php
 // index.php
-require 'db.php';
+require 'config.php.j2';
 
 $message = '';
 
