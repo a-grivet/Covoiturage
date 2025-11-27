@@ -1,5 +1,5 @@
 <?php
-// db.php : connexion PDO à la base
+// config.php : connect to the database
 
 $host = '192.168.56.112';
 $db   = 'covoit';
