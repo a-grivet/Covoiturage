@@ -4,12 +4,12 @@ require 'config.php';
 
 $message = '';
 
-// Traitement des formulaires
+// Form processing
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'add_trip') {
-        // Récupération des champs
+        // Field retrieval
         $driver_name   = trim($_POST['driver_name'] ?? '');
         $driver_email  = trim($_POST['driver_email'] ?? '');
         $driver_idafpa = trim($_POST['driver_idafpa'] ?? '');
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($trip_id > 0 && $passenger_name && $passenger_email && $passenger_idafpa && $seats_requested > 0) {
 
-            // Récupérer le trajet pour connaître les places dispo
+            // Retrieve the route to see available seats
             $stmt = $pdo->prepare("SELECT * FROM trips WHERE id = :id");
             $stmt->execute([':id' => $trip_id]);
             $trip = $stmt->fetch();
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $available = $trip['seats_total'] - $trip['seats_taken'];
 
                 if ($seats_requested <= $available) {
-                    // 1) Insérer la réservation
+                    // 1) Insert the reservation
                     $pdo->beginTransaction();
 
                     try {
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ':seats'            => $seats_requested,
                         ]);
 
-                        // 2) Mettre à jour le nombre de places prises
+                        // 2) Update the number of places taken
                         $stmt = $pdo->prepare("
                             UPDATE trips 
                             SET seats_taken = seats_taken + :seats 
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Récupération des trajets à afficher (ex : à partir d'aujourd'hui)
+// Retrieving routes to display
 $stmt = $pdo->query("
     SELECT * 
     FROM trips 
