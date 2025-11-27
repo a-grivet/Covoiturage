@@ -1,23 +1,20 @@
--- ===========================================================
---   Base de données pour l'application de covoiturage AFPA
---   Tables : trips (trajets), reservations (réservations)
--- ===========================================================
+--   Databse for Carpooling web application
+--   Tables : trips, reservations
 
 USE covoit;
 
--- On désactive temporairement les contraintes de clé étrangère
+-- temporarily disable foreign key constraints
 SET FOREIGN_KEY_CHECKS = 0;
 
--- On supprime d'abord la table enfant, puis la parent
+-- delete the child table, then the parent table
 DROP TABLE IF EXISTS reservations;
 DROP TABLE IF EXISTS trips;
 
--- On réactive les contraintes
+-- enable key constraints
 SET FOREIGN_KEY_CHECKS = 1;
 
--- ==========================
+
 -- TABLE : trips
--- ==========================
 CREATE TABLE trips (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -37,9 +34,8 @@ CREATE TABLE trips (
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ==========================
+
 -- TABLE : reservations
--- ==========================
 CREATE TABLE reservations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     trip_id INT NOT NULL,
@@ -58,7 +54,7 @@ CREATE TABLE reservations (
         ON DELETE CASCADE
 );
 
--- Index utiles
+-- Index
 CREATE INDEX idx_trip_date ON trips(trip_date);
 CREATE INDEX idx_trip_route ON trips(from_city, to_city);
 CREATE INDEX idx_reservation_trip ON reservations(trip_id);
